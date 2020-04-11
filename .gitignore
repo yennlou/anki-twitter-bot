@@ -1,0 +1,14 @@
+# Dependency directories
+node_modules
+
+# Serverless
+.webpack
+.serverless
+
+# Env
+env.yml
+.env
+.env.*
+
+# Others
+package-lock.json

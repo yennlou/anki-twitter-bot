@@ -1,0 +1,32 @@
+service: anki-twitter-bot
+
+custom:
+  bucketName: anki-bucket
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: ap-southeast-2
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:GetObject
+      Resource:
+        - arn:aws:s3:::anki-collection/*
+  environment:
+    BUCKET_NAME: ${self:custom.bucketName}
+functions:
+  tweetAnki:
+    handler: src/index.main
+resources:
+  Resources:
+    AnkiBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        AccessControl: PublicRead
+        BucketName: ${self:custom.bucketName}
+  Outputs:
+    BucketUrl:
+      Description: Anki Bucket URL
+      Value: !Sub https://s3.console.aws.amazon.com/s3/buckets/${self:custom.bucketName}
+  
