@@ -19,13 +19,26 @@ const makeHtml = (note, theme = GithubTheme) => {
       <header>
         <style>
           ${theme}
+          #note {
+            padding: 4px 20px 20px;
+          }
         </style>
       </header>
       <body>
-        <div>${note.replace('\u001f', '')}</div>
+        <div id='note'>${note.replace('\u001f', '')}</div>
       </body>
     </html>
   `
+}
+
+const getDomRect = async (selector, page) => {
+  const rect = await page.evaluate(selector => {
+    const el = document.querySelector(selector)
+    if (!el) throw (new Error('element not found.'))
+    const { x, y, width, height } = el.getBoundingClientRect()
+    return { x, y, width, height }
+  }, selector)
+  return rect
 }
 
 const makePng = async (html, dstDir) => {
@@ -33,12 +46,12 @@ const makePng = async (html, dstDir) => {
     executablePath: await chromium.executablePath
   })
   const page = await browser.newPage()
-  await page.setViewport({
-    width: 480,
-    height: 960
-  })
+  await page.setViewport({ width: 480, height: 960 })
   await page.setContent(html)
-  await page.screenshot({ path: path.join(dstDir, 'anki.png') })
+  await page.screenshot({
+    path: path.join(dstDir, 'anki.png'),
+    clip: await getDomRect('#note', page)
+  })
   await browser.close()
 }
 
