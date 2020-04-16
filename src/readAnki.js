@@ -1,11 +1,11 @@
 const path = require('path')
-const fs = require('fs')
 const { promisify } = require('util')
 const { createReadStream } = require('fs')
 const { pipeline } = require('stream')
 const pipe = promisify(pipeline)
 const Database = require('better-sqlite3')
 const unzipper = require('unzipper')
+const { clearDir } = require('./utils')
 
 const unzip = (src, dst) => {
   console.log('start unzipping...')
@@ -28,18 +28,8 @@ const readDataDir = (dir) => () => {
 
 const processCards = (notes) => {
   return Promise.resolve(notes.map(note => ({
-    question: note.sfld,
-    answer: note.flds
+    content: note.flds
   })))
-}
-
-const clearDataDir = (dir) => () => {
-  console.log('start cleaning the data dir...')
-  const files = fs.readdirSync(dir)
-  files.forEach((file) => {
-    fs.unlinkSync(path.join(dir, file))
-  })
-  console.log('cleaning completed.')
 }
 
 const main = () => {
@@ -51,7 +41,7 @@ const main = () => {
     .then(processCards)
     .then(console.log)
     .catch(console.log)
-    .finally(clearDataDir(dst))
+    .finally(clearDir(dst))
 }
 
 main()
