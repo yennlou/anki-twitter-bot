@@ -1,8 +1,10 @@
-const path = require('path')
-const chromium = require('chrome-aws-lambda')
-const GithubTheme = require('./themes/github')
+import * as path from 'path'
+import * as chromium from 'chrome-aws-lambda'
+import { Page } from 'puppeteer'
+import { theme as GithubTheme } from './themes/github'
+import { Note } from './interfaces'
 
-const NOTE_1 =
+const NOTE_CONTENT_1 =
   '<h3>Explain event delegation</h3>\u001f<div>Event delegation is a technique ' +
   'involving adding event listeners to a parent element instead of adding ' +
   'them to the descendant elements. The listener will fire whenever the ' +
@@ -14,7 +16,7 @@ const NOTE_1 =
   'elements that are removed and to bind the event for new ' +
   'elements.</li></ul>'
 
-const makeHtml = (note, theme = GithubTheme) => {
+const makeHtml = (note: Note, theme: string) => {
   return `
     <html>
       <header>
@@ -26,14 +28,14 @@ const makeHtml = (note, theme = GithubTheme) => {
         </style>
       </header>
       <body>
-        <div id='note'>${note.replace('\u001f', '')}</div>
+        <div id='note'>${note.content.replace('\u001f', '')}</div>
       </body>
     </html>
   `
 }
 
-const getDomRect = async (selector, page) => {
-  const rect = await page.evaluate((selector) => {
+const getDomRect = async (selector: string, page: Page) => {
+  const rect = await page.evaluate((selector: string) => {
     const el = document.querySelector(selector)
     if (!el) throw new Error('element not found.')
     const { x, y, width, height } = el.getBoundingClientRect()
@@ -42,7 +44,7 @@ const getDomRect = async (selector, page) => {
   return rect
 }
 
-const makePng = async (html, dstDir) => {
+const makePng = async (html: string, dstDir: string) => {
   const browser = await chromium.puppeteer.launch({
     executablePath: await chromium.executablePath
   })
@@ -58,7 +60,7 @@ const makePng = async (html, dstDir) => {
 
 const main = () => {
   const dstDir = path.join(__dirname, 'posts')
-  makePng(makeHtml(NOTE_1), dstDir)
+  makePng(makeHtml({ content: NOTE_CONTENT_1 }, GithubTheme), dstDir)
 }
 
 main()

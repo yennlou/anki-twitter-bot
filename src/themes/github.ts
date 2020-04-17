@@ -1,4 +1,4 @@
-const theme = `
+export const theme = `
 :root {
   --side-bar-bg-color: #fafafa;
   --control-text-color: #777;
@@ -403,5 +403,3 @@ header, .context-menu, .megamenu-content, footer{
   color: #b4654d;
 }
 `
-
-module.exports = theme

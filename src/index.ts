@@ -1,4 +1,4 @@
-module.exports.main = async () => {
+export const main = async () => {
   return {
     message: 'test'
   }

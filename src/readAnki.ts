@@ -27,7 +27,7 @@ const readDataDir = (dir: string) => () => {
   return Promise.resolve(notes)
 }
 
-const processCards = (notes: SqlNote[]): Promise<Note[]> => {
+const deserializeCards = (notes: SqlNote[]): Promise<Note[]> => {
   return Promise.resolve(
     notes.map((note) => ({
       content: note.flds
@@ -41,7 +41,7 @@ const main = () => {
 
   unzip(src, dst)
     .then(readDataDir(dst))
-    .then(processCards)
+    .then(deserializeCards)
     .then(console.log)
     .catch(console.log)
     .finally(clearDir(dst))

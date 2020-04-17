@@ -11,6 +11,7 @@
   "devDependencies": {
     "@types/better-sqlite3": "^5.4.0",
     "@types/node": "^13.11.1",
+    "@types/puppeteer": "^2.0.1",
     "@types/unzipper": "^0.10.3",
     "prettier": "^2.0.4",
     "puppeteer": "^2.1.1",
