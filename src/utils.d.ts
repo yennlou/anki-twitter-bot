@@ -1,1 +1,1 @@
-export function clearDir(dir:string): never
+export function clearDir(dir: string): () => void

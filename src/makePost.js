@@ -2,16 +2,17 @@ const path = require('path')
 const chromium = require('chrome-aws-lambda')
 const GithubTheme = require('./themes/github')
 
-const NOTE_1 = '<h3>Explain event delegation</h3>\u001f<div>Event delegation is a technique ' +
-'involving adding event listeners to a parent element instead of adding ' +
-'them to the descendant elements. The listener will fire whenever the ' +
-'event is triggered on the descendant elements due to event bubbling up ' +
-'the DOM. The benefits of this technique are:</div><ul><li>Memory ' +
-'footprint goes down because only one single handler is needed on the ' +
-'parent element, rather than having to attach event handlers on each ' +
-'descendant.</li><li>There is no need to unbind the handler from ' +
-'elements that are removed and to bind the event for new ' +
-'elements.</li></ul>'
+const NOTE_1 =
+  '<h3>Explain event delegation</h3>\u001f<div>Event delegation is a technique ' +
+  'involving adding event listeners to a parent element instead of adding ' +
+  'them to the descendant elements. The listener will fire whenever the ' +
+  'event is triggered on the descendant elements due to event bubbling up ' +
+  'the DOM. The benefits of this technique are:</div><ul><li>Memory ' +
+  'footprint goes down because only one single handler is needed on the ' +
+  'parent element, rather than having to attach event handlers on each ' +
+  'descendant.</li><li>There is no need to unbind the handler from ' +
+  'elements that are removed and to bind the event for new ' +
+  'elements.</li></ul>'
 
 const makeHtml = (note, theme = GithubTheme) => {
   return `
@@ -32,9 +33,9 @@ const makeHtml = (note, theme = GithubTheme) => {
 }
 
 const getDomRect = async (selector, page) => {
-  const rect = await page.evaluate(selector => {
+  const rect = await page.evaluate((selector) => {
     const el = document.querySelector(selector)
-    if (!el) throw (new Error('element not found.'))
+    if (!el) throw new Error('element not found.')
     const { x, y, width, height } = el.getBoundingClientRect()
     return { x, y, width, height }
   }, selector)
