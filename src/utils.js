@@ -1,3 +1,4 @@
+/// <reference path="./utils.d.ts"/>
 const path = require('path')
 const fs = require('fs')
 
