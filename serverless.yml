@@ -2,6 +2,12 @@ service: anki-twitter-bot
 
 custom:
   bucketName: anki-bucket
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules: true
+
+plugins:
+  - serverless-webpack
 
 provider:
   name: aws
@@ -29,4 +35,3 @@ resources:
     BucketUrl:
       Description: Anki Bucket URL
       Value: !Sub https://s3.console.aws.amazon.com/s3/buckets/${self:custom.bucketName}
-  
