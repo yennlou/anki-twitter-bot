@@ -150,7 +150,7 @@ li>ul {
   margin: 0 0;
 }
 hr {
-  height: 4px;
+  height: 0px;
   padding: 0;
   margin: 16px 0;
   background-color: #e7e7e7;

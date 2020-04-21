@@ -1,22 +1,9 @@
-import * as path from 'path'
 import * as chromium from 'chrome-aws-lambda'
 import { Page } from 'puppeteer'
 import { theme as GithubTheme } from './themes/github'
 import { Note } from './interfaces'
 
-const NOTE_CONTENT_1 =
-  '<h3>Explain event delegation</h3>\u001f<div>Event delegation is a technique ' +
-  'involving adding event listeners to a parent element instead of adding ' +
-  'them to the descendant elements. The listener will fire whenever the ' +
-  'event is triggered on the descendant elements due to event bubbling up ' +
-  'the DOM. The benefits of this technique are:</div><ul><li>Memory ' +
-  'footprint goes down because only one single handler is needed on the ' +
-  'parent element, rather than having to attach event handlers on each ' +
-  'descendant.</li><li>There is no need to unbind the handler from ' +
-  'elements that are removed and to bind the event for new ' +
-  'elements.</li></ul>'
-
-const makeHtml = (note: Note, theme: string) => {
+const makeNoteHtml = (note: Note, theme: string = GithubTheme) => {
   return `
     <html>
       <header>
@@ -28,7 +15,7 @@ const makeHtml = (note: Note, theme: string) => {
         </style>
       </header>
       <body>
-        <div id='note'>${note.content.replace('\u001f', '')}</div>
+        <div id='note'>${note.content.replace('\u001f', '<hr>')}</div>
       </body>
     </html>
   `
@@ -44,7 +31,7 @@ const getDomRect = async (selector: string, page: Page) => {
   return rect
 }
 
-const makePng = async (html: string, dstDir: string) => {
+const makePng = async (html: string, dst: string) => {
   const browser = await chromium.puppeteer.launch({
     executablePath: await chromium.executablePath
   })
@@ -52,15 +39,10 @@ const makePng = async (html: string, dstDir: string) => {
   await page.setViewport({ width: 480, height: 960 })
   await page.setContent(html)
   await page.screenshot({
-    path: path.join(dstDir, 'anki.png'),
+    path: dst,
     clip: await getDomRect('#note', page)
   })
   await browser.close()
 }
 
-const main = () => {
-  const dstDir = path.join(__dirname, 'posts')
-  makePng(makeHtml({ content: NOTE_CONTENT_1 }, GithubTheme), dstDir)
-}
-
-main()
+export { makeNoteHtml, makePng }
