@@ -1,16 +1,13 @@
 import * as fs from 'fs'
-import { promisify } from 'util'
-import { pipeline } from 'stream'
 import * as Database from 'better-sqlite3'
 import { Extract } from 'unzipper'
 import { SqlNote } from './interfaces'
 
-const pipe = promisify(pipeline)
-
 const unzip = (src: string, dst: string) => () => {
-  const source = fs.createReadStream(src)
-  const promise = pipe(source, Extract({ path: dst }))
-  return promise
+  return fs
+    .createReadStream(src)
+    .pipe(Extract({ path: dst }))
+    .promise()
 }
 
 const readAnki2 = (path: string) => () => {
