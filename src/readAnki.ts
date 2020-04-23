@@ -10,16 +10,22 @@ const unzip = (src: string, dst: string) => () => {
     .promise()
 }
 
-const readAnki2 = (path: string) => () => {
-  const db = new Database(path)
+const findAll = (dbPath: string) => () => {
+  const db = new Database(dbPath)
   const notes = db.prepare('SELECT * FROM notes').all()
   return notes
 }
 
-const deserializeCards = (notes: SqlNote[]) => {
-  return notes.map((note) => ({
-    content: note.flds
-  }))
+const findOneRandomly = (dbPath: string) => () => {
+  const db = new Database(dbPath)
+  const note = db.prepare('SELECT * FROM notes ORDER BY RANDOM() LIMIT 1').get()
+  return note
 }
 
-export { unzip, readAnki2, deserializeCards }
+const deserializeNote = (note: SqlNote) => {
+  return {
+    content: note.flds
+  }
+}
+
+export { unzip, findAll, deserializeNote, findOneRandomly }
