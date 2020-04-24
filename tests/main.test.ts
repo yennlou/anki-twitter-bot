@@ -11,6 +11,7 @@ import {
 } from '../src/readAnki'
 import { makeNoteHtml, makePng } from '../src/makePost'
 import { fetchAnkiDeck } from '../src/fetchAnkiDeck'
+import { postTwitter } from '../src/postTwitter'
 
 const DECK_KEY = 'mock-data.apkg'
 const DECK_PATH = path.join(__dirname, 'decks/mock-data.apkg')
@@ -45,7 +46,7 @@ test('should return the notes from apkg file', async () => {
     .finally(clearDir(TMP_FOLDER))
 })
 
-test.only('should return a random note from apkg file', async () => {
+test('should return a random note from apkg file', async () => {
   await Promise.resolve()
     .then(unzip(DECK_PATH, TMP_FOLDER))
     .then(findOneRandomly(path.join(TMP_FOLDER, 'collection.anki2')))
@@ -61,6 +62,10 @@ test('shoud make a png file from a note', async () => {
     .then(() => imgcat(path.join(TMP_FOLDER, 'anki.png')))
     .then(console.log)
     .finally(clearDir(TMP_FOLDER))
+})
+
+test.only('should tweet a flashcard', async () => {
+  postTwitter({ content: 'test test' })
 })
 
 test('should fetch the deck and make the post', async () => {

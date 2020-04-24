@@ -6,7 +6,7 @@
   "license": "MIT",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "env-cmd jest"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.50",
@@ -16,6 +16,7 @@
     "@types/puppeteer": "^2.0.1",
     "@types/unzipper": "^0.10.3",
     "aws-sdk": "^2.660.0",
+    "env-cmd": "^10.1.0",
     "imgcat": "^2.3.0",
     "jest": "^25.4.0",
     "prettier": "^2.0.4",
@@ -31,6 +32,7 @@
     "better-sqlite3": "^6.0.1",
     "chrome-aws-lambda": "^2.1.1",
     "puppeteer-core": "^2.1.1",
+    "twitter-lite": "^0.10.1-0",
     "unzipper": "^0.10.10"
   }
 }
