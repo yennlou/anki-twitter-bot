@@ -16,6 +16,7 @@ import { postTwitter } from '../src/postTwitter'
 const DECK_KEY = 'mock-data.apkg'
 const DECK_PATH = path.join(__dirname, 'decks/mock-data.apkg')
 const TMP_FOLDER = path.join(__dirname, 'tmp')
+const TEST_PNG_PATH = path.join(__dirname, 'test.png')
 
 const NOTES_DATA: Note[] = [
   { content: 'question 1\u001fanswer 1' },
@@ -65,7 +66,10 @@ test('shoud make a png file from a note', async () => {
 })
 
 test.only('should tweet a flashcard', async () => {
-  postTwitter({ content: 'test test' })
+  await postTwitter({
+    content: 'test test',
+    imgSrc: TEST_PNG_PATH
+  })
 })
 
 test('should fetch the deck and make the post', async () => {

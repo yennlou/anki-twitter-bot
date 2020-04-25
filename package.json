@@ -29,10 +29,11 @@
     "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
+    "@types/twit": "^2.2.24",
     "better-sqlite3": "^6.0.1",
     "chrome-aws-lambda": "^2.1.1",
     "puppeteer-core": "^2.1.1",
-    "twitter-lite": "^0.10.1-0",
+    "twit": "^2.2.11",
     "unzipper": "^0.10.10"
   }
 }
