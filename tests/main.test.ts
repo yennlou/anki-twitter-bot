@@ -2,7 +2,7 @@ import * as fs from 'fs'
 import * as path from 'path'
 import imgcat = require('imgcat')
 import { Note } from '../src/interfaces'
-import { clearDir } from '../src/utils'
+import { createTmpFolder, destroyTmpFolder } from '../src/utils'
 import {
   unzip,
   findAll,
@@ -12,6 +12,9 @@ import {
 import { makeNoteHtml, makePng } from '../src/makePost'
 import { fetchAnkiDeck } from '../src/fetchAnkiDeck'
 import { postTwitter } from '../src/postTwitter'
+
+beforeEach(() => createTmpFolder(__dirname))
+afterEach(() => destroyTmpFolder(__dirname))
 
 const DECK_KEY = 'mock-data.apkg'
 const DECK_PATH = path.join(__dirname, 'decks/mock-data.apkg')
@@ -32,7 +35,6 @@ test('should fetch the anki deck', async () => {
   await fetchAnkiDeck(DECK_KEY, path.join(TMP_FOLDER, DECK_KEY))
     .then(() => fs.existsSync(path.join(TMP_FOLDER, DECK_KEY)))
     .then(trace('deck fetched'))
-    .finally(clearDir(TMP_FOLDER))
 })
 
 test('should return the notes from apkg file', async () => {
@@ -44,7 +46,6 @@ test('should return the notes from apkg file', async () => {
     .then((notes) => {
       expect(notes).toEqual(NOTES_DATA)
     })
-    .finally(clearDir(TMP_FOLDER))
 })
 
 test('should return a random note from apkg file', async () => {
@@ -53,7 +54,6 @@ test('should return a random note from apkg file', async () => {
     .then(findOneRandomly(path.join(TMP_FOLDER, 'collection.anki2')))
     .then(deserializeNote)
     .then(trace('note extracted'))
-    .finally(clearDir(TMP_FOLDER))
 })
 
 test('shoud make a png file from a note', async () => {
@@ -62,7 +62,6 @@ test('shoud make a png file from a note', async () => {
     .then((html) => makePng(html, path.join(TMP_FOLDER, 'anki.png')))
     .then(() => imgcat(path.join(TMP_FOLDER, 'anki.png')))
     .then(console.log)
-    .finally(clearDir(TMP_FOLDER))
 })
 
 test.skip('should tweet a flashcard', async () => {
@@ -85,6 +84,5 @@ test.only('should fetch, make note and post', async () => {
     .then((html) => makePng(html, TMP_IMAGE_PATH))
     .then(() => imgcat(TMP_IMAGE_PATH))
     .then(console.log)
-    // .then(() => postTwitter({ content: '', imgSrc: TMP_IMAGE_PATH }))
-    .finally(clearDir(TMP_FOLDER))
+  // .then(() => postTwitter({ content: '', imgSrc: TMP_IMAGE_PATH }))
 }, 20000)
