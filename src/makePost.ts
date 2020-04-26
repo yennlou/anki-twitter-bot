@@ -33,7 +33,10 @@ const getDomRect = async (selector: string, page: Page) => {
 
 const makePng = async (html: string, dst: string) => {
   const browser = await chromium.puppeteer.launch({
-    executablePath: await chromium.executablePath
+    args: chromium.args,
+    defaultViewport: chromium.defaultViewport,
+    executablePath: await chromium.executablePath,
+    headless: chromium.headless
   })
   const page = await browser.newPage()
   await page.setViewport({ width: 480, height: 960 })
