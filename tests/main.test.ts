@@ -65,14 +65,14 @@ test('shoud make a png file from a note', async () => {
     .finally(clearDir(TMP_FOLDER))
 })
 
-test.only('should tweet a flashcard', async () => {
+test.skip('should tweet a flashcard', async () => {
   await postTwitter({
     content: 'test test',
     imgSrc: TEST_PNG_PATH
   })
 })
 
-test('should fetch the deck and make the post', async () => {
+test.only('should fetch, make note and post', async () => {
   const TMP_DECK_PATH = path.join(TMP_FOLDER, DECK_KEY)
   const TMP_ANKI2_PATH = path.join(TMP_FOLDER, 'collection.anki2')
   const TMP_IMAGE_PATH = path.join(TMP_FOLDER, 'anki.png')
@@ -85,5 +85,6 @@ test('should fetch the deck and make the post', async () => {
     .then((html) => makePng(html, TMP_IMAGE_PATH))
     .then(() => imgcat(TMP_IMAGE_PATH))
     .then(console.log)
+    // .then(() => postTwitter({ content: '', imgSrc: TMP_IMAGE_PATH }))
     .finally(clearDir(TMP_FOLDER))
 }, 20000)

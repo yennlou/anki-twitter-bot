@@ -25,20 +25,21 @@ const client = new Twit({
 })
 
 const postTwitter = async (post: AnkiPost) => {
-  if (!post.imgSrc) {
-    return client.post('statuses/update', {
-      status: post.content
-    })
+  let mediaUploadResponse: any
+  if (post.imgSrc) {
+    const imgdata = fs.readFileSync(post.imgSrc)
+    const base64Image = Buffer.from(imgdata).toString('base64')
+    try {
+      mediaUploadResponse = await client.post('media/upload', {
+        media_data: base64Image
+      })
+    } catch (e) {
+      throw new Error('Upload Image failed.')
+    }
   }
-  const imgdata = fs.readFileSync(post.imgSrc)
-  const base64Image = Buffer.from(imgdata).toString('base64')
-  const mediaUploadResponse = (await client.post('media/upload', {
-    media_data: base64Image
-  })) as any
-
   return client.post('statuses/update', {
     status: post.content,
-    media_ids: mediaUploadResponse.data.media_id_string
+    media_ids: mediaUploadResponse?.data?.media_id_string
   })
 }
 
