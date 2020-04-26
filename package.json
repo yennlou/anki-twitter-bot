@@ -8,7 +8,7 @@
   "scripts": {
     "test": "env-cmd jest",
     "local": "env-cmd sls invoke local --function tweetAnki",
-    "deploy": "env-cmd sls deploy"
+    "deploy": "sls deploy"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.50",
