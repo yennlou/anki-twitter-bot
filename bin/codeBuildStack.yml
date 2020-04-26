@@ -1,0 +1,99 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: CI/CD for the anki tweeter bot
+Parameters:
+  GithubUser:
+    Type: String
+    Default: yennlou
+  GithubRepo:
+    Type: String
+    Default: anki-twitter-bot
+  DeckKey:
+    Type: String
+    Default: mock-data.apkg
+  TwitterApiKey:
+    NoEcho: true
+    Type: String
+  TwitterSecretKey:
+    NoEcho: true
+    Type: String
+  TwitterAccessToken:
+    NoEcho: true
+    Type: String
+  TwitterAccessTokenSecret:
+    NoEcho: true
+    Type: String
+  BuildType:
+    Type: String
+    Default: LINUX_CONTAINER
+  BuildComputeType:
+    Type: String
+    Default: BUILD_GENERAL1_SMALL
+  BuildImage:
+    Type: String
+    Default: 'aws/codebuild/amazonlinux2-x86_64-standard:2.0'
+Resources:
+  CodeBuildRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Action:
+              - 'sts:AssumeRole'
+            Principal:
+              Service:
+                - codebuild.amazonaws.com
+      Policies:
+        - PolicyName: 'codebuild-service'
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: '*'
+                Resource: '*'
+  CodeBuild:
+    Type: 'AWS::CodeBuild::Project'
+    DependsOn: CodeBuildRole
+    Properties:
+      Name: !Sub '${AWS::StackName}-deploy'
+      Description: Deploy anki bot
+      BadgeEnabled: true
+      ServiceRole: !GetAtt CodeBuildRole.Arn
+      Artifacts:
+        Type: NO_ARTIFACTS
+      Environment:
+        Type: !Ref BuildType
+        ComputeType: !Ref BuildComputeType
+        Image: !Sub '${BuildImage}'
+        EnvironmentVariables:
+          - Name: DECK_KEY
+            Type: PLAINTEXT
+            Value: !Ref DeckKey
+          - Name: TWITTER_API_KEY
+            Type: PLAINTEXT
+            Value: !Ref TwitterApiKey
+          - Name: TWITTER_SECRET_KEY
+            Type: PLAINTEXT
+            Value: !Ref TwitterSecretKey
+          - Name: TWITTER_ACCESS_TOKEN
+            Type: PLAINTEXT
+            Value: !Ref TwitterAccessToken
+          - Name: TWITTER_ACCESS_TOKEN_SECRET
+            Type: PLAINTEXT
+            Value: !Ref TwitterAccessTokenSecret
+      Source:
+        Auth:
+          Type: OAUTH
+        Location: !Join
+          - ''
+          - - 'https://github.com/'
+            - !Ref GithubUser
+            - '/'
+            - !Ref GithubRepo
+        Type: GITHUB
+      SourceVersion: refs/heads/master
+      TimeoutInMinutes: 10
+Outputs:
+  CodeBuildUrl:
+    Description: CodeBuild Url
+    Value: !Sub https://${AWS::Region}.console.aws.amazon.com/codesuite/codebuild/projects/${CodeBuild}?region=${AWS::Region}

@@ -18,6 +18,7 @@
     "@types/puppeteer": "^2.0.1",
     "@types/unzipper": "^0.10.3",
     "aws-sdk": "^2.660.0",
+    "dotenv": "^8.2.0",
     "env-cmd": "^10.1.0",
     "imgcat": "^2.3.0",
     "jest": "^25.4.0",
@@ -28,7 +29,8 @@
     "ts-loader": "^7.0.0",
     "typescript": "^3.8.3",
     "webpack": "^4.42.1",
-    "webpack-node-externals": "^1.7.2"
+    "webpack-node-externals": "^1.7.2",
+    "yargs": "^15.3.1"
   },
   "dependencies": {
     "@types/twit": "^2.2.24",
