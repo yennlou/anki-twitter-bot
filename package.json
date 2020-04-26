@@ -6,7 +6,9 @@
   "license": "MIT",
   "main": "index.js",
   "scripts": {
-    "test": "env-cmd jest"
+    "test": "env-cmd jest",
+    "local": "env-cmd sls invoke local --function tweetAnki",
+    "deploy": "env-cmd sls deploy"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.50",

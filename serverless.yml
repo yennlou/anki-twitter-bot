@@ -18,12 +18,19 @@ provider:
       Action:
         - s3:GetObject
       Resource:
-        - arn:aws:s3:::anki-collection/*
+        - arn:aws:s3:::anki-bucket/*
   environment:
     BUCKET_NAME: ${self:custom.bucketName}
+    DECK_KEY: ${env:DECK_KEY}
+    TWITTER_API_KEY: ${env:TWITTER_API_KEY}
+    TWITTER_SECRET_KEY: ${env:TWITTER_SECRET_KEY}
+    TWITTER_ACCESS_TOKEN: ${env:TWITTER_ACCESS_TOKEN}
+    TWITTER_ACCESS_TOKEN_SECRET: ${env:TWITTER_ACCESS_TOKEN_SECRET}
+
 functions:
   tweetAnki:
     handler: src/index.main
+
 resources:
   Resources:
     AnkiBucket:
