@@ -30,6 +30,8 @@ provider:
 functions:
   tweetAnki:
     handler: src/index.main
+    events:
+      - schedule: rate(6 hours)
 
 resources:
   Resources:
