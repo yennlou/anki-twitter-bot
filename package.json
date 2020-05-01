@@ -1,10 +1,9 @@
 {
   "name": "anki-twitter-bot",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "author": "Yenn Lou <yennlou21@gmail.com>",
   "description": "a twitter bot based on aws for posting anki card daily",
   "license": "MIT",
-  "main": "index.js",
   "scripts": {
     "test": "env-cmd jest",
     "local": "env-cmd sls invoke local --function tweetAnki",
