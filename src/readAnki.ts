@@ -22,10 +22,16 @@ const findOneRandomly = (dbPath: string) => () => {
   return note
 }
 
+const findOne = (dbPath: string, id: number) => () => {
+  const db = new Database(dbPath)
+  const stmt = db.prepare('SELECT * FROM notes WHERE id = ?')
+  return stmt.get(id)
+}
+
 const deserializeNote = (note: SqlNote) => {
   return {
     content: note.flds
   }
 }
 
-export { unzip, findAll, deserializeNote, findOneRandomly }
+export { unzip, findAll, findOne, deserializeNote, findOneRandomly }

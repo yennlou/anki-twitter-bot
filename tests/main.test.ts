@@ -6,6 +6,7 @@ import { createTmpFolder, destroyTmpFolder } from '../src/utils'
 import {
   unzip,
   findAll,
+  findOne,
   findOneRandomly,
   deserializeNote
 } from '../src/readAnki'
@@ -16,7 +17,8 @@ import { postTwitter } from '../src/postTwitter'
 beforeEach(() => createTmpFolder(__dirname))
 afterEach(() => destroyTmpFolder(__dirname))
 
-const DECK_KEY = 'mock-data.apkg'
+// const DECK_KEY = 'mock-data.apkg'
+const DECK_KEY = 'front-end-interview-handbook.apkg'
 const DECK_PATH = path.join(__dirname, 'decks/mock-data.apkg')
 const TMP_FOLDER = path.join(__dirname, 'tmp')
 const TEST_PNG_PATH = path.join(__dirname, 'test.png')
@@ -78,7 +80,8 @@ test.only('should fetch, make note and post', async () => {
 
   await fetchAnkiDeck(DECK_KEY, TMP_DECK_PATH)
     .then(unzip(TMP_DECK_PATH, TMP_FOLDER))
-    .then(findOneRandomly(TMP_ANKI2_PATH))
+    // .then(findOneRandomly(TMP_ANKI2_PATH))
+    .then(findOne(TMP_ANKI2_PATH, 1588042748239))
     .then(deserializeNote)
     .then(makeNoteHtml)
     .then((html) => makePng(html, TMP_IMAGE_PATH))
