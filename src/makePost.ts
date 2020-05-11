@@ -39,7 +39,7 @@ const makePng = async (html: string, dst: string) => {
     headless: chromium.headless
   })
   const page = await browser.newPage()
-  await page.setViewport({ width: 480, height: 2000 })
+  await page.setViewport({ width: 480, height: 3000 })
   await page.setContent(html)
   await page.screenshot({
     path: dst,
